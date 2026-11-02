@@ -1,0 +1,27 @@
+# Proje raporları (kişisel bilgi içerir, uzak repoya gönderilmez)
+docs/oneri-raporu.pdf
+docs/oneri.md
+docs/durum.md
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+
+# Node / frontend
+node_modules/
+dist/
+*.local
+
+# SQLite veri tabanı dosyaları
+*.db
+*.db-shm
+*.db-wal
+
+# Editör ve işletim sistemi
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
