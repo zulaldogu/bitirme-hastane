@@ -13,13 +13,13 @@ interface Loaded {
   rules: Rules;
   shiftTypes: ShiftType[];
   activity: ActivityEvent[];
-  fair: Schedule;
-  unfair: Schedule;
+  schedule: Schedule;
+  /** Adalet amacı olmadan çözüm; yalnızca kıyas rozetinde kullanılır. */
+  baseline: Schedule;
 }
 
 export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void }) {
   const [data, setData] = useState<Loaded | null>(null);
-  const [fairness, setFairness] = useState(true);
   const [solving, setSolving] = useState(false);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
       api.getActivity(),
       api.getSchedule(true),
       api.getSchedule(false),
-    ]).then(([nurses, rules, shiftTypes, activity, fair, unfair]) =>
-      setData({ nurses, rules, shiftTypes, activity, fair, unfair }),
+    ]).then(([nurses, rules, shiftTypes, activity, schedule, baseline]) =>
+      setData({ nurses, rules, shiftTypes, activity, schedule, baseline }),
     );
   }, []);
 
@@ -39,14 +39,15 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
 
   const solve = async () => {
     setSolving(true);
-    const schedule = await api.getSchedule(fairness);
-    setData((d) => d && { ...d, [fairness ? 'fair' : 'unfair']: schedule });
+    // Adalet amacı her zaman açık (K20).
+    const schedule = await api.getSchedule(true);
+    setData((d) => d && { ...d, schedule });
     setSolving(false);
   };
 
-  const current = fairness ? data.fair : data.unfair;
+  const current = data.schedule;
   const stats = computeStats(current, data.nurses, data.rules);
-  const other = computeStats(fairness ? data.unfair : data.fair, data.nurses, data.rules);
+  const baseline = computeStats(data.baseline, data.nurses, data.rules);
 
   return (
     <Grid gutter={20}>
@@ -57,15 +58,13 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
           nurses={data.nurses}
           rules={data.rules}
           shiftTypes={data.shiftTypes}
-          fairness={fairness}
-          onFairnessChange={setFairness}
           solving={solving}
           onSolve={solve}
           onNavigate={onNavigate}
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, md: 5 }}>
-        <FairnessCard fairness={fairness} stats={stats} other={other} />
+        <FairnessCard stats={stats} baseline={baseline} />
       </Grid.Col>
       <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
         <ShiftMixCard stats={stats} days={current.days} />

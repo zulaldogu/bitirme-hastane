@@ -1,4 +1,4 @@
-import { Avatar, Button, Group, Paper, SegmentedControl, SimpleGrid, Stack, Text, Tooltip } from '@mantine/core';
+import { Avatar, Button, Group, Paper, SimpleGrid, Stack, Text, Tooltip } from '@mantine/core';
 import { IconSparkles, IconStarFilled, IconUserPlus } from '@tabler/icons-react';
 import type { Nurse, Rules, Schedule, ShiftType } from '../../api';
 import type { ScheduleStats } from '../../api/stats';
@@ -12,8 +12,6 @@ interface Props {
   nurses: Nurse[];
   rules: Rules;
   shiftTypes: ShiftType[];
-  fairness: boolean;
-  onFairnessChange: (on: boolean) => void;
   solving: boolean;
   onSolve: () => void;
   onNavigate: (tab: string) => void;
@@ -53,17 +51,14 @@ export function SummaryCard(props: Props) {
               {longDate.format(new Date(today))}
             </Text>
           </Stack>
-          <SegmentedControl
-            radius="xl"
-            size="xs"
-            value={props.fairness ? 'on' : 'off'}
-            onChange={(v) => props.onFairnessChange(v === 'on')}
-            data={[
-              { value: 'on', label: 'Adalet açık' },
-              { value: 'off', label: 'Adalet kapalı' },
-            ]}
-            classNames={{ root: classes.pillSwitch }}
-          />
+          <Stack gap={2} align="flex-end">
+            <Text fz="sm" c="dimmed">
+              Dönem
+            </Text>
+            <Text fz={18} fw={500}>
+              {periodLabel(schedule.days)}
+            </Text>
+          </Stack>
         </Group>
 
         <SimpleGrid cols={{ base: 1, xs: 3 }} spacing="sm">
@@ -130,11 +125,10 @@ export function SummaryCard(props: Props) {
             </Button>
           </Group>
           <Text fz="sm" c="dimmed">
-            {periodLabel(schedule.days)} ·{' '}
             <Text span fw={600} c="dark" className="num">
               {fmt(stats.covered)}/{fmt(stats.required)}
             </Text>{' '}
-            vardiya
+            vardiya karşılandı
           </Text>
         </Group>
       </Stack>

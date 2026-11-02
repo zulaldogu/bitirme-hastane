@@ -6,15 +6,14 @@ import { fmt } from '../../format';
 import classes from './Overview.module.css';
 
 interface Props {
-  fairness: boolean;
   stats: ScheduleStats;
-  /** Karşı durumdaki (adalet açık ↔ kapalı) çizelgenin özeti. */
-  other: ScheduleStats;
+  /** Adalet amacı olmadan bulunan çözümün özeti, kıyas için. */
+  baseline: ScheduleStats;
 }
 
 /** Adil gece dağılımı (K10): en çok ve en az gece alan arasındaki fark. */
-export function FairnessCard({ fairness, stats, other }: Props) {
-  const diff = stats.nightGap - other.nightGap;
+export function FairnessCard({ stats, baseline }: Props) {
+  const diff = stats.nightGap - baseline.nightGap;
 
   return (
     <Paper p={{ base: 20, md: 28 }} h="100%" bg="lime.4" className={classes.fairCard}>
@@ -41,7 +40,7 @@ export function FairnessCard({ fairness, stats, other }: Props) {
             {diff !== 0 && (
               <Badge size="lg" color="white" c={diff < 0 ? 'forest.8' : 'red.7'} tt="none" fw={500}>
                 {diff > 0 ? '+' : '−'}
-                {Math.abs(diff)} {fairness ? 'adalet kapalıya göre' : 'adalet açığa göre'}
+                {Math.abs(diff)} adaletsiz çözüme göre
               </Badge>
             )}
           </Group>
