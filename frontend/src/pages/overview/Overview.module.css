@@ -3,6 +3,10 @@
   padding: 4px;
 }
 
+.shiftBox {
+  border-radius: 20px;
+}
+
 .fairCard {
   position: relative;
   overflow: hidden;

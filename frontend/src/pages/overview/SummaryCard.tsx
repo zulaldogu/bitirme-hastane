@@ -1,13 +1,17 @@
-import { ActionIcon, Badge, Button, Group, Paper, SegmentedControl, Stack, Text } from '@mantine/core';
-import { IconArrowUpRight, IconCircleCheck, IconSparkles, IconUserPlus } from '@tabler/icons-react';
-import type { Schedule } from '../../api';
+import { Avatar, Button, Group, Paper, SegmentedControl, SimpleGrid, Stack, Text, Tooltip } from '@mantine/core';
+import { IconSparkles, IconStarFilled, IconUserPlus } from '@tabler/icons-react';
+import type { Nurse, Rules, Schedule, ShiftType } from '../../api';
 import type { ScheduleStats } from '../../api/stats';
 import { fmt, periodLabel } from '../../format';
+import { shiftColors } from '../../theme';
 import classes from './Overview.module.css';
 
 interface Props {
   schedule: Schedule;
   stats: ScheduleStats;
+  nurses: Nurse[];
+  rules: Rules;
+  shiftTypes: ShiftType[];
   fairness: boolean;
   onFairnessChange: (on: boolean) => void;
   solving: boolean;
@@ -15,17 +19,43 @@ interface Props {
   onNavigate: (tab: string) => void;
 }
 
-/** Aktif çizelgenin özeti: kaç vardiya karşılandı, hangi dönem. */
+const longDate = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  weekday: 'long',
+  timeZone: 'UTC',
+});
+
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join('')
+    .toLocaleUpperCase('tr');
+
+/** Bugün hangi vardiyada kim var; altında dönemin özeti. */
 export function SummaryCard(props: Props) {
-  const { stats } = props;
-  const complete = stats.covered === stats.required;
+  const { schedule, stats } = props;
+  // Bugün dönemin içindeyse o gün, değilse dönemin ilk günü gösterilir.
+  const now = new Date().toISOString().slice(0, 10);
+  const today = schedule.days.includes(now) ? now : schedule.days[0];
 
   return (
     <Paper p={{ base: 20, md: 28 }} h="100%">
-      <Stack justify="space-between" h="100%" gap="xl">
+      <Stack justify="space-between" h="100%" gap="lg">
         <Group justify="space-between" align="flex-start">
+          <Stack gap={2}>
+            <Text fz="sm" c="dimmed">
+              Bugün
+            </Text>
+            <Text fz={26} fw={500}>
+              {longDate.format(new Date(today))}
+            </Text>
+          </Stack>
           <SegmentedControl
             radius="xl"
+            size="xs"
             value={props.fairness ? 'on' : 'off'}
             onChange={(v) => props.onFairnessChange(v === 'on')}
             data={[
@@ -34,51 +64,54 @@ export function SummaryCard(props: Props) {
             ]}
             classNames={{ root: classes.pillSwitch }}
           />
-          <Stack gap={2} align="flex-end">
-            <Text fz="sm" c="dimmed">
-              Dönem
-            </Text>
-            <Text fz={20} fw={500}>
-              {periodLabel(props.schedule.days)}
-            </Text>
-          </Stack>
         </Group>
 
-        <Stack gap={6}>
-          <Text fz="sm" c="dimmed">
-            Karşılanan vardiya ihtiyacı
-          </Text>
-          <Group gap="md" align="center">
-            <Text className="num" fz={{ base: 48, md: 64 }} fw={500} lh={1}>
-              {fmt(stats.covered)}
-              <Text span inherit c="gray.4">
-                {' '}
-                / {fmt(stats.required)}
-              </Text>
-            </Text>
-            {complete && (
-              <Badge
-                size="lg"
-                color="lime.2"
-                c="forest.9"
-                leftSection={<IconCircleCheck size={16} />}
-                tt="none"
-                fw={500}
+        <SimpleGrid cols={{ base: 1, xs: 3 }} spacing="sm">
+          {props.shiftTypes.map((s) => {
+            const people = schedule.assignments
+              .filter((a) => a.date === today && a.shift === s.code)
+              .map((a) => props.nurses.find((n) => n.id === a.nurseId)!);
+            return (
+              <Stack
+                key={s.code}
+                gap={10}
+                p={16}
+                className={classes.shiftBox}
+                style={{ background: `color-mix(in srgb, ${shiftColors[s.code]} 14%, white)` }}
               >
-                Tüm ihtiyaç karşılandı
-              </Badge>
-            )}
-          </Group>
-          <Text fz="sm" c="dimmed">
-            {props.schedule.assignments.length} atama · çözüm{' '}
-            {fmt(props.schedule.solveSeconds, 2)} sn
-          </Text>
-        </Stack>
+                <Group justify="space-between">
+                  <Text fw={600}>{s.name}</Text>
+                  <Text fz="xs" c="dimmed">
+                    {s.start.slice(0, 2)}–{s.end.slice(0, 2)}
+                  </Text>
+                </Group>
+                <Avatar.Group spacing={8}>
+                  {people.map((n) => (
+                    <Tooltip key={n.id} label={n.name} withArrow>
+                      <Avatar radius="xl" size={36} variant="filled" color={shiftColors[s.code]}>
+                        {initials(n.name)}
+                      </Avatar>
+                    </Tooltip>
+                  ))}
+                </Avatar.Group>
+                <Group gap={6}>
+                  <Text fz="sm" className="num">
+                    {people.length}/{props.rules.minStaff[s.code]} kişi
+                  </Text>
+                  {people.some((n) => n.senior) && (
+                    <Tooltip label="Kıdemli var" withArrow>
+                      <IconStarFilled size={12} color="#c99a1e" />
+                    </Tooltip>
+                  )}
+                </Group>
+              </Stack>
+            );
+          })}
+        </SimpleGrid>
 
-        <Group justify="space-between" align="flex-end">
+        <Group justify="space-between" align="center">
           <Group gap="sm">
             <Button
-              size="md"
               color="forest.8"
               c="lime.3"
               leftSection={<IconSparkles size={18} />}
@@ -88,7 +121,6 @@ export function SummaryCard(props: Props) {
               Çizelge Oluştur
             </Button>
             <Button
-              size="md"
               variant="outline"
               color="forest.8"
               leftSection={<IconUserPlus size={18} />}
@@ -97,16 +129,13 @@ export function SummaryCard(props: Props) {
               Personel Ekle
             </Button>
           </Group>
-          <ActionIcon
-            size={72}
-            radius={999}
-            color="lime.4"
-            c="forest.9"
-            aria-label="Çizelgeye git"
-            onClick={() => props.onNavigate('schedule')}
-          >
-            <IconArrowUpRight size={32} stroke={1.5} />
-          </ActionIcon>
+          <Text fz="sm" c="dimmed">
+            {periodLabel(schedule.days)} ·{' '}
+            <Text span fw={600} c="dark" className="num">
+              {fmt(stats.covered)}/{fmt(stats.required)}
+            </Text>{' '}
+            vardiya
+          </Text>
         </Group>
       </Stack>
     </Paper>

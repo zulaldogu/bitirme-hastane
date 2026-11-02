@@ -1,6 +1,6 @@
 import { Grid, Skeleton } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { api, type ActivityEvent, type Nurse, type Rules, type Schedule } from '../../api';
+import { api, type ActivityEvent, type Nurse, type Rules, type Schedule, type ShiftType } from '../../api';
 import { computeStats } from '../../api/stats';
 import { ActivityCard } from './ActivityCard';
 import { FairnessCard } from './FairnessCard';
@@ -11,6 +11,7 @@ import { SummaryCard } from './SummaryCard';
 interface Loaded {
   nurses: Nurse[];
   rules: Rules;
+  shiftTypes: ShiftType[];
   activity: ActivityEvent[];
   fair: Schedule;
   unfair: Schedule;
@@ -25,11 +26,12 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
     Promise.all([
       api.getNurses(),
       api.getRules(),
+      api.getShiftTypes(),
       api.getActivity(),
       api.getSchedule(true),
       api.getSchedule(false),
-    ]).then(([nurses, rules, activity, fair, unfair]) =>
-      setData({ nurses, rules, activity, fair, unfair }),
+    ]).then(([nurses, rules, shiftTypes, activity, fair, unfair]) =>
+      setData({ nurses, rules, shiftTypes, activity, fair, unfair }),
     );
   }, []);
 
@@ -52,6 +54,9 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
         <SummaryCard
           schedule={current}
           stats={stats}
+          nurses={data.nurses}
+          rules={data.rules}
+          shiftTypes={data.shiftTypes}
           fairness={fairness}
           onFairnessChange={setFairness}
           solving={solving}
