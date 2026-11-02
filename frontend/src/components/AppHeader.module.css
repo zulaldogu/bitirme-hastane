@@ -1,0 +1,44 @@
+.header {
+  padding: 4px 4px 28px;
+}
+
+.tabs {
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  color: #6f6f6f;
+  white-space: nowrap;
+  transition: background 120ms ease, color 120ms ease;
+
+  &:hover {
+    color: #111;
+  }
+
+  &[data-active] {
+    background: var(--mantine-color-lime-4);
+    color: #111;
+    font-weight: 500;
+  }
+}
+
+.soon {
+  text-transform: none;
+  font-weight: 500;
+}
+
+.role {
+  background: #fff;
+  padding: 4px;
+}
+
+.roleIndicator {
+  background: var(--mantine-color-forest-8);
+}
+
+.role :global(.mantine-SegmentedControl-label[data-active]) {
+  color: var(--mantine-color-lime-3);
+}

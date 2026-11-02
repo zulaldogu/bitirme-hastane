@@ -1,0 +1,48 @@
+.pillSwitch {
+  background: #f1f1ef;
+  padding: 4px;
+}
+
+.fairCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  top: -10px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  fill: rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
+
+.fairPill {
+  background: var(--mantine-color-forest-8);
+  padding: 8px 16px;
+  border-radius: 999px;
+}
+
+.fairBox {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+
+.eventRow {
+  padding: 12px 4px;
+  border-bottom: 1px solid #efefef;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.pendingRow {
+  padding: 12px;
+  margin-bottom: 4px;
+  border: 1px solid #f6d7c8;
+  background: #fff8f4;
+  border-radius: 20px;
+}

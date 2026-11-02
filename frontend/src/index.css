@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  background: #dcdcda;
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Rakamlar sabit genişlikte: büyük sayılar değişirken kaymaz. */
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}

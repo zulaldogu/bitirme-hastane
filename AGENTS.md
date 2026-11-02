@@ -12,5 +12,8 @@ karar destek sistemi. Kullanıcı Türkçe konuşuyor; Türkçe cevap ver.
 - `docs/` altındaki bu üç dosya `.gitignore` içinde (kişisel bilgi içeriyorlar)
   ve yalnızca kullanıcının makinesinde bulunur. Dosyalar yoksa kullanıcıdan iste.
   Onları git'e ekleme.
+- **Kural: Her önemli adımdan sonra commit at, sormadan.** Önemli adım; bir
+  yol haritası maddesinin, bir ekranın, bir kısıtın veya bir düzeltmenin
+  derlenip test edilmiş hali demektir. Push için kullanıcıya sor.
 - Gerçek hasta veya personel verisi kullanılmaz. Yalnızca sentetik veri ve
   kıyaslama setleri (INRC-II, NSPLib) kullanılır.
