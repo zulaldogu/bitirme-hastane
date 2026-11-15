@@ -24,12 +24,6 @@ const tabs: (NavTab & { soon: string })[] = [
     ready: false,
     soon: 'Vardiya başına asgari kişi ve haftalık sınır burada ayarlanacak.',
   },
-  {
-    id: 'fairness',
-    label: 'Adalet',
-    ready: false,
-    soon: 'Kişi başına gece vardiyası dağılımı burada ayrıntılı gösterilecek.',
-  },
 ];
 
 export default function App() {
