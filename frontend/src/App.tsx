@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { AppHeader, type NavTab, type Role } from './components/AppHeader';
 import { ComingSoon } from './components/ComingSoon';
 import { OverviewPage } from './pages/overview/OverviewPage';
+import { SchedulePage } from './pages/schedule/SchedulePage';
 
 const tabs: (NavTab & { soon: string })[] = [
   { id: 'overview', label: 'Genel Bakış', ready: true, soon: '' },
   {
     id: 'schedule',
     label: 'Çizelge',
-    ready: false,
+    ready: true,
     soon: 'Personel × gün tablosu ve "Oluştur" düğmesi çözücü bağlanınca burada olacak.',
   },
   {
@@ -27,7 +28,15 @@ const tabs: (NavTab & { soon: string })[] = [
 ];
 
 export default function App() {
-  const [active, setActive] = useState('overview');
+  // Seçili sekme adres çubuğunda tutulur (#schedule); yenileyince aynı sekme açılır.
+  const [active, setActiveState] = useState(() => {
+    const id = window.location.hash.slice(1);
+    return tabs.some((t) => t.id === id) ? id : 'overview';
+  });
+  const setActive = (id: string) => {
+    setActiveState(id);
+    window.history.replaceState(null, '', `#${id}`);
+  };
   const [role, setRole] = useState<Role>('manager');
   const tab = tabs.find((t) => t.id === active)!;
 
@@ -47,8 +56,10 @@ export default function App() {
           title="Personel görünümü"
           description="Sıradaki vardiyan, bu dönemki gece sayın ve 14 günlük takvimin burada olacak."
         />
-      ) : tab.ready ? (
+      ) : active === 'overview' ? (
         <OverviewPage onNavigate={setActive} />
+      ) : active === 'schedule' ? (
+        <SchedulePage />
       ) : (
         <ComingSoon title={tab.label} description={tab.soon} />
       )}

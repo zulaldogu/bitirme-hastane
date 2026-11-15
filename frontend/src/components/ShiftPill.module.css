@@ -1,0 +1,26 @@
+.pill,
+.leave {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  border-radius: 8px;
+  vertical-align: middle;
+
+  &[data-size='lg'] {
+    width: 40px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 16px;
+  }
+}
+
+.pill {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.leave {
+  background: repeating-linear-gradient(45deg, #e6e6e6 0 4px, #f6f6f6 4px 8px);
+}

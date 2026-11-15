@@ -1,0 +1,84 @@
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+
+  & th,
+  & td {
+    padding: 5px 4px;
+    text-align: center;
+  }
+
+  & th {
+    font-weight: 500;
+    color: var(--mantine-color-dimmed);
+    padding-bottom: 10px;
+  }
+
+  & [data-weekend] {
+    background: #f8f8f6;
+  }
+
+  & th[data-today] .dayNum {
+    background: var(--mantine-color-lime-4);
+    border-radius: 999px;
+    padding: 0 7px;
+  }
+
+  & tbody tr:hover td {
+    background: #f4fce9;
+  }
+}
+
+.weekday {
+  display: block;
+  font-size: 12px;
+}
+
+.dayNum {
+  display: inline-block;
+  color: #111;
+  font-weight: 600;
+}
+
+.name {
+  text-align: left !important;
+  white-space: nowrap;
+  font-weight: 500;
+  padding-right: 16px !important;
+}
+
+.total {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.divider td {
+  border-top: 1px solid #e5e5e5;
+  padding: 4px 0 !important;
+}
+
+.coverLabel {
+  color: var(--mantine-color-dimmed);
+  font-weight: 500;
+}
+
+.ok,
+.bad {
+  font-weight: 600;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ok {
+  color: var(--mantine-color-forest-6);
+}
+
+.bad {
+  color: var(--mantine-color-red-7);
+}
