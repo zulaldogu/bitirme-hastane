@@ -1,0 +1,87 @@
+.layout {
+  min-height: calc(100vh - 140px);
+}
+
+.panel {
+  flex-shrink: 0;
+}
+
+.headRow {
+  padding: 0 12px 8px;
+  border-bottom: 1px solid #efefef;
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+
+  & p {
+    font-size: 13px;
+  }
+}
+
+.row {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  transition: background 120ms ease;
+
+  &:hover {
+    background: #f8f8f6;
+  }
+
+  &[data-active] {
+    background: #f4fce9;
+  }
+}
+
+.colAvatar {
+  width: 38px;
+  flex-shrink: 0;
+}
+
+.colName {
+  flex: 1;
+  min-width: 0;
+}
+
+.colSenior {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.colLeave {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.colEdit {
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.day[data-selected] {
+  background: var(--mantine-color-lime-4);
+  color: #111;
+  font-weight: 600;
+}
+
+/* Dar ekranda isim sütunu sıkışmasın. */
+@media (max-width: 1400px) {
+  .colSenior {
+    width: 100px;
+  }
+
+  .colLeave {
+    width: 110px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    flex-wrap: wrap !important;
+  }
+
+  .panel {
+    width: 100% !important;
+  }
+}

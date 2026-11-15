@@ -4,6 +4,7 @@ import { AppHeader, type NavTab, type Role } from './components/AppHeader';
 import { ComingSoon } from './components/ComingSoon';
 import { OverviewPage } from './pages/overview/OverviewPage';
 import { SchedulePage } from './pages/schedule/SchedulePage';
+import { StaffPage } from './pages/staff/StaffPage';
 
 const tabs: (NavTab & { soon: string })[] = [
   { id: 'overview', label: 'Genel Bakış', ready: true, soon: '' },
@@ -16,7 +17,7 @@ const tabs: (NavTab & { soon: string })[] = [
   {
     id: 'staff',
     label: 'Personel',
-    ready: false,
+    ready: true,
     soon: 'Personel listesi, kıdemli işareti ve izin günleri burada yönetilecek.',
   },
   {
@@ -60,6 +61,8 @@ export default function App() {
         <OverviewPage onNavigate={setActive} />
       ) : active === 'schedule' ? (
         <SchedulePage />
+      ) : active === 'staff' ? (
+        <StaffPage />
       ) : (
         <ComingSoon title={tab.label} description={tab.soon} />
       )}
