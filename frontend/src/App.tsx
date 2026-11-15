@@ -1,4 +1,4 @@
-import { Box, Container } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { useState } from 'react';
 import { AppHeader, type NavTab, type Role } from './components/AppHeader';
 import { ComingSoon } from './components/ComingSoon';
@@ -38,28 +38,26 @@ export default function App() {
   const tab = tabs.find((t) => t.id === active)!;
 
   return (
-    <Container size={1320} py={{ base: 16, md: 40 }} px={{ base: 16, md: 24 }}>
-      <Box bg="#f1f1ef" p={{ base: 16, md: 28 }} style={{ borderRadius: 36 }}>
-        <AppHeader
-          tabs={tabs}
-          active={active}
-          onTabChange={setActive}
-          role={role}
-          onRoleChange={setRole}
-          greetingName={role === 'manager' ? 'Sorumlu Hemşire' : 'Ayşe Kaya'}
-          subtitle="Dahiliye Servisi"
+    <Box mih="100vh" p={{ base: 16, md: 24 }}>
+      <AppHeader
+        tabs={tabs}
+        active={active}
+        onTabChange={setActive}
+        role={role}
+        onRoleChange={setRole}
+        greetingName={role === 'manager' ? 'Sorumlu Hemşire' : 'Ayşe Kaya'}
+        subtitle="Dahiliye Servisi"
+      />
+      {role === 'staff' ? (
+        <ComingSoon
+          title="Personel görünümü"
+          description="Sıradaki vardiyan, bu dönemki gece sayın ve 14 günlük takvimin burada olacak."
         />
-        {role === 'staff' ? (
-          <ComingSoon
-            title="Personel görünümü"
-            description="Sıradaki vardiyan, bu dönemki gece sayın ve 14 günlük takvimin burada olacak."
-          />
-        ) : tab.ready ? (
-          <OverviewPage onNavigate={setActive} />
-        ) : (
-          <ComingSoon title={tab.label} description={tab.soon} />
-        )}
-      </Box>
-    </Container>
+      ) : tab.ready ? (
+        <OverviewPage onNavigate={setActive} />
+      ) : (
+        <ComingSoon title={tab.label} description={tab.soon} />
+      )}
+    </Box>
   );
 }
