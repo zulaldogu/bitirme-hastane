@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import {
   api,
+  getCurrentSchedule,
   periodDays,
   type Nurse,
   type Rules,
@@ -63,7 +64,7 @@ export function SchedulePage() {
 
   // İlk açılış: son oluşturulan çizelgenin dönemi, yoksa bu haftanın dönemi.
   useEffect(() => {
-    Promise.all([api.getNurses(), api.getRules(), api.getShiftTypes(), api.getSchedule()])
+    Promise.all([api.getNurses(), api.getRules(), api.getShiftTypes(), getCurrentSchedule(todayIso())])
       .then(([nurses, rules, shiftTypes, latest]) => {
         setBase({ nurses, rules, shiftTypes });
         setSchedule(latest);

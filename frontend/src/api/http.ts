@@ -34,5 +34,5 @@ export const httpApi: Api = {
   updateRules: (update) => request('PUT', '/rules', update),
   getSchedule: (start) => request('GET', start ? `/schedule?start=${start}` : '/schedule'),
   generateSchedule: (start) => request('POST', '/schedule', { startDate: start }),
-  getActivity: () => request('GET', '/activity'),
+  getActivity: (start) => request('GET', start ? `/activity?start=${start}` : '/activity'),
 };

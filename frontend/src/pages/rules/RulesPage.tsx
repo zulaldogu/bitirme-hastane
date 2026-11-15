@@ -1,7 +1,7 @@
 import { ActionIcon, Button, Group, Paper, Popover, SimpleGrid, Skeleton, Stack, Text } from '@mantine/core';
 import { IconAlertTriangle, IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { api, periodDays, type Nurse, type Rules, type RulesUpdate, type ShiftType } from '../../api';
+import { api, getCurrentSchedule, periodDays, type Nurse, type Rules, type RulesUpdate, type ShiftType } from '../../api';
 import { ShiftPill } from '../../components/ShiftPill';
 import { mondayOf, periodLabel, todayIso } from '../../format';
 import { notifyError, notifySuccess } from '../../notify';
@@ -54,7 +54,7 @@ export function RulesPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    Promise.all([api.getRules(), api.getShiftTypes(), api.getNurses(), api.getSchedule()])
+    Promise.all([api.getRules(), api.getShiftTypes(), api.getNurses(), getCurrentSchedule(todayIso())])
       .then(([rules, shiftTypes, nurses, schedule]) => {
         setData({ rules, shiftTypes, nurses, start: schedule?.startDate ?? mondayOf(todayIso()) });
         setDraft({ minStaff: rules.minStaff, maxShiftsPerWeek: rules.maxShiftsPerWeek });

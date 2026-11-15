@@ -1,0 +1,29 @@
+.bigPill {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 56px;
+  border-radius: 16px;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(14, minmax(56px, 1fr));
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.day {
+  padding: 12px 4px;
+  border-radius: 18px;
+  background: #f7f7f5;
+  border: 2px solid transparent;
+
+  &[data-today] {
+    border-color: var(--mantine-color-lime-5);
+  }
+}

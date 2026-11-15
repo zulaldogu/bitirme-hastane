@@ -105,5 +105,6 @@ export interface Api {
   getSchedule(start?: string): Promise<Schedule | null>;
   /** Çözücüyü çalıştırır. Her zaman adil gece dağılımı amacıyla üretilir (K20). */
   generateSchedule(start: string): Promise<Schedule>;
-  getActivity(): Promise<ActivityEvent[]>;
+  /** Dönemin olayları; `start` verilmezse en son oluşturulan çizelgeninkiler. */
+  getActivity(start?: string): Promise<ActivityEvent[]>;
 }

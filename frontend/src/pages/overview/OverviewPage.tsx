@@ -1,6 +1,6 @@
 import { Grid, Skeleton } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { api, type ActivityEvent, type Nurse, type Rules, type Schedule, type ShiftType } from '../../api';
+import { api, getCurrentSchedule, type ActivityEvent, type Nurse, type Rules, type Schedule, type ShiftType } from '../../api';
 import { computeStats } from '../../api/stats';
 import { mondayOf, todayIso } from '../../format';
 import { notifyError, notifySuccess } from '../../notify';
@@ -24,13 +24,16 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
   const [solving, setSolving] = useState(false);
 
   useEffect(() => {
+    // Hiç çizelge yoksa bu haftanın dönemi için bir tane oluşturulur.
+    const schedule = getCurrentSchedule(todayIso()).then(
+      (s) => s ?? api.generateSchedule(mondayOf(todayIso())),
+    );
     Promise.all([
       api.getNurses(),
       api.getRules(),
       api.getShiftTypes(),
-      api.getActivity(),
-      // Hiç çizelge yoksa bu haftanın dönemi için bir tane oluşturulur.
-      api.getSchedule().then((s) => s ?? api.generateSchedule(mondayOf(todayIso()))),
+      schedule.then((s) => api.getActivity(s.startDate)),
+      schedule,
     ])
       .then(([nurses, rules, shiftTypes, activity, schedule]) =>
         setData({ nurses, rules, shiftTypes, activity, schedule }),
@@ -48,7 +51,7 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
         notifyError(new Error(unsolvedMessage(schedule.status)));
         return;
       }
-      const activity = await api.getActivity();
+      const activity = await api.getActivity(schedule.startDate);
       setData((d) => d && { ...d, schedule, activity });
       notifySuccess('Çizelge yeniden oluşturuldu.');
     } catch (e) {

@@ -119,11 +119,14 @@ api.MapPost("/schedule", async (GenerateBody body, AppDb db) =>
 
 // ---- Son olaylar (Genel Bakış) ----
 
-api.MapGet("/activity", async (AppDb db) =>
+// start verilirse o dönemin son çizelgesi, verilmezse en son oluşturulan çizelge.
+api.MapGet("/activity", async (DateOnly? start, AppDb db) =>
 {
     var tr = CultureInfo.GetCultureInfo("tr-TR");
     var events = new List<ActivityEvent>();
-    var run = await db.ScheduleRuns.Include(r => r.Assignments).OrderByDescending(r => r.Id).FirstOrDefaultAsync();
+    var runs = db.ScheduleRuns.Include(r => r.Assignments).AsQueryable();
+    if (start is { } s) runs = runs.Where(r => r.StartDate == s);
+    var run = await runs.OrderByDescending(r => r.Id).FirstOrDefaultAsync();
     if (run is null) return events;
 
     var dto = await ScheduleDto.FromAsync(run, db);

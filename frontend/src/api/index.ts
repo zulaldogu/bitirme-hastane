@@ -77,3 +77,23 @@ const mockApi: Api = {
 };
 
 export const api: Api = import.meta.env.VITE_USE_MOCK === 'true' ? mockApi : httpApi;
+
+/**
+ * Ekranların açılışta gösterdiği çizelge: bugünü içeren dönem (dönem 14 gün ve Pazartesi
+ * başladığı için başlangıç bu hafta ya da geçen haftanın Pazartesi'sidir), yoksa en son
+ * oluşturulan çizelge.
+ */
+export async function getCurrentSchedule(today: string): Promise<Schedule | null> {
+  const [y, m, d] = today.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  date.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 6) % 7));
+  const thisMonday = date.toISOString().slice(0, 10);
+  date.setUTCDate(date.getUTCDate() - 7);
+  const lastMonday = date.toISOString().slice(0, 10);
+
+  return (
+    (await api.getSchedule(thisMonday)) ??
+    (await api.getSchedule(lastMonday)) ??
+    (await api.getSchedule())
+  );
+}
