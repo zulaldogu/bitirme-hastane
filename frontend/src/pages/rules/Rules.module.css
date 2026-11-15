@@ -1,0 +1,23 @@
+.rule {
+  padding: 14px 0;
+  border-bottom: 1px solid #efefef;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.bottom {
+  flex-wrap: wrap;
+}
+
+.verdict {
+  border-radius: 18px;
+  background: #fff4ec;
+  color: var(--mantine-color-red-8);
+
+  &[data-ok] {
+    background: #f4fce9;
+    color: var(--mantine-color-forest-7);
+  }
+}

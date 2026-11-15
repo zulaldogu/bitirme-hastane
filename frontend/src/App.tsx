@@ -5,6 +5,7 @@ import { ComingSoon } from './components/ComingSoon';
 import { OverviewPage } from './pages/overview/OverviewPage';
 import { SchedulePage } from './pages/schedule/SchedulePage';
 import { StaffPage } from './pages/staff/StaffPage';
+import { RulesPage } from './pages/rules/RulesPage';
 
 const tabs: (NavTab & { soon: string })[] = [
   { id: 'overview', label: 'Genel Bakış', ready: true, soon: '' },
@@ -23,7 +24,7 @@ const tabs: (NavTab & { soon: string })[] = [
   {
     id: 'rules',
     label: 'Kurallar',
-    ready: false,
+    ready: true,
     soon: 'Vardiya başına asgari kişi ve haftalık sınır burada ayarlanacak.',
   },
 ];
@@ -63,6 +64,8 @@ export default function App() {
         <SchedulePage />
       ) : active === 'staff' ? (
         <StaffPage />
+      ) : active === 'rules' ? (
+        <RulesPage />
       ) : (
         <ComingSoon title={tab.label} description={tab.soon} />
       )}
