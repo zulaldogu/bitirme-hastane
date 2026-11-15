@@ -14,6 +14,13 @@ export const shiftTypes: ShiftType[] = [
 export const rules: Rules = {
   minStaff: { S: 3, A: 2, G: 2 },
   maxShiftsPerWeek: 5,
+  minSeniorPerShift: 1,
+  forbiddenSuccessions: [
+    { from: 'G', to: 'S' },
+    { from: 'G', to: 'A' },
+    { from: 'A', to: 'S' },
+  ],
+  nightShift: 'G',
 };
 
 /** 2–15 Kasım 2026: Pazartesi başlayan iki takvim haftası. */

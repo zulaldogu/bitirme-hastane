@@ -2,6 +2,7 @@ import { ActionIcon, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core'
 import {
   IconCalendarOff,
   IconCheck,
+  IconAlertTriangle,
   IconCircleCheck,
   IconInfoCircle,
   IconListDetails,
@@ -16,6 +17,7 @@ import classes from './Overview.module.css';
 const icons: Record<ActivityKind, ReactNode> = {
   'leave-request': <IconUserQuestion size={18} />,
   success: <IconCircleCheck size={18} />,
+  warning: <IconAlertTriangle size={18} />,
   info: <IconInfoCircle size={18} />,
   leave: <IconCalendarOff size={18} />,
 };
@@ -44,7 +46,7 @@ export function ActivityCard({ events }: { events: ActivityEvent[] }) {
                 size={38}
                 radius={999}
                 variant="default"
-                c={e.kind === 'success' ? 'forest.6' : 'dark'}
+                c={e.kind === 'success' ? 'forest.6' : e.kind === 'warning' ? 'red.7' : 'dark'}
               >
                 {icons[e.kind]}
               </ThemeIcon>

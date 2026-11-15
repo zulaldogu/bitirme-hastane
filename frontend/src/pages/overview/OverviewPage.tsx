@@ -2,6 +2,9 @@ import { Grid, Skeleton } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { api, type ActivityEvent, type Nurse, type Rules, type Schedule, type ShiftType } from '../../api';
 import { computeStats } from '../../api/stats';
+import { mondayOf, todayIso } from '../../format';
+import { notifyError, notifySuccess } from '../../notify';
+import { unsolvedMessage } from '../schedule/unsolved';
 import { ActivityCard } from './ActivityCard';
 import { FairnessCard } from './FairnessCard';
 import { NightsCard } from './NightsCard';
@@ -26,19 +29,33 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
       api.getRules(),
       api.getShiftTypes(),
       api.getActivity(),
-      api.getSchedule(),
-    ]).then(([nurses, rules, shiftTypes, activity, schedule]) =>
-      setData({ nurses, rules, shiftTypes, activity, schedule }),
-    );
+      // Hiç çizelge yoksa bu haftanın dönemi için bir tane oluşturulur.
+      api.getSchedule().then((s) => s ?? api.generateSchedule(mondayOf(todayIso()))),
+    ])
+      .then(([nurses, rules, shiftTypes, activity, schedule]) =>
+        setData({ nurses, rules, shiftTypes, activity, schedule }),
+      )
+      .catch(notifyError);
   }, []);
 
   if (!data) return <OverviewSkeleton />;
 
   const solve = async () => {
     setSolving(true);
-    const schedule = await api.getSchedule();
-    setData((d) => d && { ...d, schedule });
-    setSolving(false);
+    try {
+      const schedule = await api.generateSchedule(data.schedule.startDate);
+      if (schedule.assignments.length === 0) {
+        notifyError(new Error(unsolvedMessage(schedule.status)));
+        return;
+      }
+      const activity = await api.getActivity();
+      setData((d) => d && { ...d, schedule, activity });
+      notifySuccess('Çizelge yeniden oluşturuldu.');
+    } catch (e) {
+      notifyError(e);
+    } finally {
+      setSolving(false);
+    }
   };
 
   const current = data.schedule;
