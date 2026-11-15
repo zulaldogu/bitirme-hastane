@@ -1,0 +1,35 @@
+{
+  "department": { "id": "dahiliye", "name": "Dahiliye Servisi" },
+  "startDate": "2026-11-02",
+  "dayCount": 14,
+  "shiftTypes": [
+    { "code": "S", "name": "Sabah", "start": "08:00", "end": "16:00" },
+    { "code": "A", "name": "Akşam", "start": "16:00", "end": "24:00" },
+    { "code": "G", "name": "Gece", "start": "00:00", "end": "08:00" }
+  ],
+  "rules": {
+    "minStaff": { "S": 3, "A": 2, "G": 2 },
+    "maxShiftsPerWeek": 5,
+    "minSeniorPerShift": 1,
+    "forbiddenSuccessions": [
+      { "from": "G", "to": "S" },
+      { "from": "G", "to": "A" },
+      { "from": "A", "to": "S" }
+    ],
+    "nightShift": "G"
+  },
+  "nurses": [
+    { "id": "n1", "name": "Ayşe Kaya", "title": "Kıdemli Hemşire", "senior": true, "departmentId": "dahiliye", "leaveDays": ["2026-11-07", "2026-11-08"] },
+    { "id": "n2", "name": "Elif Demir", "title": "Kıdemli Hemşire", "senior": true, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n3", "name": "Zeynep Arslan", "title": "Kıdemli Hemşire", "senior": true, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n4", "name": "Fatma Yıldız", "title": "Kıdemli Hemşire", "senior": true, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n5", "name": "Merve Tekin", "title": "Kıdemli Hemşire", "senior": true, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n6", "name": "Selin Bulut", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": ["2026-11-11"] },
+    { "id": "n7", "name": "Büşra Çelik", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n8", "name": "Esra Nas", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n9", "name": "Derya Öztürk", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": ["2026-11-04", "2026-11-05"] },
+    { "id": "n10", "name": "Gamze Sarı", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n11", "name": "Hatice Uysal", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": [] },
+    { "id": "n12", "name": "Seda Polat", "title": "Hemşire", "senior": false, "departmentId": "dahiliye", "leaveDays": [] }
+  ]
+}

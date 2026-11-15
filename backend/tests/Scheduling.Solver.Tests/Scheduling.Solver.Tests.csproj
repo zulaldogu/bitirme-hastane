@@ -18,6 +18,11 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <!-- data/ altındaki örnek dosyalar testlerin yanına kopyalanır. -->
+  <ItemGroup>
+    <None Include="..\..\..\data\*.json" Link="data\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Scheduling.Solver\Scheduling.Solver.csproj" />
   </ItemGroup>
