@@ -12,13 +12,12 @@ const mockApi: Api = {
   getShiftTypes: () => delay(data.shiftTypes),
   getNurses: () => delay(data.nurses),
   getRules: () => delay(data.rules),
-  getSchedule: (fairness) =>
+  getSchedule: () =>
     delay(
       {
         days: data.days,
-        fairness,
-        assignments: generateMockSchedule(data.nurses, data.days, data.rules, fairness),
-        solveSeconds: fairness ? 1.24 : 0.41,
+        assignments: generateMockSchedule(data.nurses, data.days, data.rules),
+        solveSeconds: 1.24,
       },
       // Senkron çözümü (K17) taklit eder.
       900,

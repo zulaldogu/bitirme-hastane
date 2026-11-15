@@ -1,20 +1,12 @@
-import { Badge, Group, Paper, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Group, Paper, SimpleGrid, Stack, Text } from '@mantine/core';
 import { IconMoon, IconScale, IconStar } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 import type { ScheduleStats } from '../../api/stats';
 import { fmt } from '../../format';
 import classes from './Overview.module.css';
 
-interface Props {
-  stats: ScheduleStats;
-  /** Adalet amacı olmadan bulunan çözümün özeti, kıyas için. */
-  baseline: ScheduleStats;
-}
-
 /** Adil gece dağılımı (K10): en çok ve en az gece alan arasındaki fark. */
-export function FairnessCard({ stats, baseline }: Props) {
-  const diff = stats.nightGap - baseline.nightGap;
-
+export function FairnessCard({ stats }: { stats: ScheduleStats }) {
   return (
     <Paper p={{ base: 20, md: 28 }} h="100%" bg="lime.4" className={classes.fairCard}>
       <svg className={classes.star} viewBox="0 0 100 100" aria-hidden>
@@ -37,12 +29,6 @@ export function FairnessCard({ stats, baseline }: Props) {
             <Text className="num" fz={{ base: 48, md: 60 }} fw={500} lh={1} c="forest.9">
               {stats.nightGap} gece
             </Text>
-            {diff !== 0 && (
-              <Badge size="lg" color="white" c={diff < 0 ? 'forest.8' : 'red.7'} tt="none" fw={500}>
-                {diff > 0 ? '+' : '−'}
-                {Math.abs(diff)} adaletsiz çözüme göre
-              </Badge>
-            )}
           </Group>
         </Stack>
 

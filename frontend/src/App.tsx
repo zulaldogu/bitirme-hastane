@@ -28,7 +28,7 @@ const tabs: (NavTab & { soon: string })[] = [
     id: 'fairness',
     label: 'Adalet',
     ready: false,
-    soon: 'Adalet amacıyla ve amacı olmadan çözümlerin karşılaştırması burada olacak.',
+    soon: 'Kişi başına gece vardiyası dağılımı burada ayrıntılı gösterilecek.',
   },
 ];
 

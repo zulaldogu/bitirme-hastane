@@ -42,8 +42,6 @@ export interface Assignment {
 export interface Schedule {
   /** Dönemin günleri, sırayla. */
   days: string[];
-  /** Adil gece dağılımı amacı açık mıydı (K10). */
-  fairness: boolean;
   assignments: Assignment[];
   solveSeconds: number;
 }
@@ -62,6 +60,7 @@ export interface Api {
   getShiftTypes(): Promise<ShiftType[]>;
   getNurses(): Promise<Nurse[]>;
   getRules(): Promise<Rules>;
-  getSchedule(fairness: boolean): Promise<Schedule>;
+  /** Çizelge her zaman adil gece dağılımı amacıyla üretilir (K20). */
+  getSchedule(): Promise<Schedule>;
   getActivity(): Promise<ActivityEvent[]>;
 }

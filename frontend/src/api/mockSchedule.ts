@@ -2,9 +2,8 @@ import type { Assignment, Nurse, Rules, ShiftCode } from './types';
 
 // Sahte çizelge üreticisi. Gerçek çözücü (CP-SAT) hazır olana kadar ekranları
 // besler. Açgözlü (greedy) çalışır: K8'deki sert kısıtları sağlar ama en iyi
-// çözümü aramaz. `fairness` açıkken geceleri en az gece alana verir; kapalıyken
-// geceleri rastgele dağıtır, tıpkı amaçsız bir çözücünün herhangi bir geçerli
-// çözümü döndürmesi gibi.
+// çözümü aramaz. Adil gece dağılımı için geceleri her zaman o ana kadar en az
+// gece alana verir (K20).
 
 // Açgözlü seçim ileriyi görmediği için bazen çıkmaza girer (ör. Cumartesi
 // Akşam/Gece çalışan kıdemliler Pazar Sabah'a atanamaz). Bu durumda eşitlikler
@@ -15,11 +14,10 @@ export function generateMockSchedule(
   nurses: Nurse[],
   days: string[],
   rules: Rules,
-  fairness: boolean,
 ): Assignment[] {
   for (let seed = 1; seed <= 500; seed++) {
     try {
-      return attempt(nurses, days, rules, fairness, mulberry32(seed));
+      return attempt(nurses, days, rules, mulberry32(seed));
     } catch {
       // sonraki tohum
     }
@@ -41,7 +39,6 @@ function attempt(
   nurses: Nurse[],
   days: string[],
   rules: Rules,
-  fairness: boolean,
   random: () => number,
 ): Assignment[] {
   const prev = new Map<string, ShiftCode | null>();
@@ -74,11 +71,7 @@ function attempt(
 
       const key = (n: Nurse): number[] => {
         const t = tie.get(n.id)!;
-        if (shift === 'G') {
-          return fairness
-            ? [nights.get(n.id)!, total.get(n.id)!, t]
-            : [t];
-        }
+        if (shift === 'G') return [nights.get(n.id)!, total.get(n.id)!, t];
         return [week.get(n.id)!, total.get(n.id)!, t];
       };
       const byKey = (a: Nurse, b: Nurse) => {

@@ -14,8 +14,6 @@ interface Loaded {
   shiftTypes: ShiftType[];
   activity: ActivityEvent[];
   schedule: Schedule;
-  /** Adalet amacı olmadan çözüm; yalnızca kıyas rozetinde kullanılır. */
-  baseline: Schedule;
 }
 
 export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void }) {
@@ -28,10 +26,9 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
       api.getRules(),
       api.getShiftTypes(),
       api.getActivity(),
-      api.getSchedule(true),
-      api.getSchedule(false),
-    ]).then(([nurses, rules, shiftTypes, activity, schedule, baseline]) =>
-      setData({ nurses, rules, shiftTypes, activity, schedule, baseline }),
+      api.getSchedule(),
+    ]).then(([nurses, rules, shiftTypes, activity, schedule]) =>
+      setData({ nurses, rules, shiftTypes, activity, schedule }),
     );
   }, []);
 
@@ -39,15 +36,13 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
 
   const solve = async () => {
     setSolving(true);
-    // Adalet amacı her zaman açık (K20).
-    const schedule = await api.getSchedule(true);
+    const schedule = await api.getSchedule();
     setData((d) => d && { ...d, schedule });
     setSolving(false);
   };
 
   const current = data.schedule;
   const stats = computeStats(current, data.nurses, data.rules);
-  const baseline = computeStats(data.baseline, data.nurses, data.rules);
 
   return (
     <Grid gutter={20}>
@@ -64,7 +59,7 @@ export function OverviewPage({ onNavigate }: { onNavigate: (tab: string) => void
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, md: 5 }}>
-        <FairnessCard stats={stats} baseline={baseline} />
+        <FairnessCard stats={stats} />
       </Grid.Col>
       <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
         <ShiftMixCard stats={stats} days={current.days} />
