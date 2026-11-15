@@ -7,7 +7,9 @@ sentetiktir.
 
 ## Çalıştırma
 
-Gerekenler: .NET SDK 10, Node 24.
+Gerekenler: .NET SDK 10, Node 24. Komutlar proje klasörünün içinden, iki ayrı terminalde
+çalıştırılır. Windows PowerShell "running scripts is disabled" hatası verirse `npm` yerine
+`npm.cmd` yazın.
 
 ```bash
 dotnet run --project backend/src/Api --launch-profile http   # http://localhost:5249
