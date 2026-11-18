@@ -6,4 +6,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/Scheduling.Solver.Tests/Scheduling.Solver.Tests.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Scheduling.Experiments/Scheduling.Experiments.csproj" />
+  </Folder>
 </Solution>

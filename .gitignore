@@ -25,3 +25,7 @@ dist/
 .idea/
 Thumbs.db
 .DS_Store
+
+# Vize raporu (ad ve numara içerir)
+docs/vize-raporu.docx
+docs/vize-raporu.pdf
